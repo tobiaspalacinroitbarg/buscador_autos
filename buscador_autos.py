@@ -16,9 +16,17 @@ def obtener_links_meli():
         soup = bs4.BeautifulSoup(requests.get(url).text,'lxml')
         links_raw = soup.find_all('a', {'class': 'ui-search-item__group__element shops__items-group-details ui-search-link'}, href=True)
         for link in links_raw :
-            links.append(link['href'])
+            id = str(link['href'].split("-")[1])
+            links.append(id)
         print(f"fin página {pagina+1}")
 
     # Exportar lista final a .txt
-    with open('links.txt', 'w') as f:
+    with open('ids.txt', 'w') as f:
         f.write(str(links))
+
+def obtener_datos_auto():
+    pass
+
+# Al ejecutar...
+if __name__=='__main__':
+   obtener_links_meli()
