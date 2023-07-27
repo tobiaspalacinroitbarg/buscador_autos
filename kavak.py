@@ -1,8 +1,19 @@
 # Imports
 import http.client
+from bs4 import BeautifulSoup
+import requests
+import pandas as pd
 
 
-def obtener_datos_auto():
+def obtener_ids():
+    '''
+    Función que busca los links de las publicaciones de todos los autos usados y nuevos
+    '''
+    
+
+
+    
+def obtener_datos_auto(ids):
     """
     Función que obtiene todos los datos de un auto
     """
@@ -25,10 +36,24 @@ def obtener_datos_auto():
         'sec-ch-ua-mobile': "?0",
         'sec-ch-ua-platform': "^\^Windows^^"
         }
+    
+    df = pd.DataFrame(columns=["car_id","car_make","car_year","km","region_id","car_model","price","monthly_payment","car_trim","promotion_price","promotion_name","body_type","transmission","filter_status","ext_color","location_filter","fuel_type","financing_only","status","filter_status_code"])
 
-    conn.request("GET", "/drago-vip/dynamic?stockId=248528", payload, headers)
+    for id in ids:
+        conn.request("GET", f"/drago-vip/dynamic?stockId={id}", payload, headers)
 
-    res = conn.getresponse()
-    data = res.read()
+        res = conn.getresponse()
+        data = res.read()
 
-    print(data.decode("utf-8"))
+        df_aux = df.from_dict(data.decode("utf-8")["data"]["mainResult"])
+        df = pd.concat([df, df_aux])
+        
+    return df
+
+
+if __name__=="__main__":
+    ids = obtener_ids()
+    with open("ids_kavak.txt","w") as f:
+        f.write(str(ids))
+    df = obtener_datos_auto(ids)
+    df.to_excel("kavak_result.xlsx")
