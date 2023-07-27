@@ -5,6 +5,9 @@ from bs4 import BeautifulSoup
 from aux_funcs import calcular_fecha
 
 def intentar_descripcion(url):
+    """
+    Función que intenta obtener la descripción tres veces
+    """
     for iter in range(0,3):
         try:
             soup = bs4.BeautifulSoup(requests.get(url).text,'lxml')
@@ -14,6 +17,11 @@ def intentar_descripcion(url):
             continue
     return None
 
+def obtener_descr_carac(url):
+    """
+    Función que obtiene la descripción y características
+    """
+    pass
 
 def fotos_auto(soup):
     """
@@ -39,7 +47,6 @@ def obtener_ids_meli():
     '''
     # Inicializar lista vacía
     ids:list[str] = []
-
     # Iterar, buscar link y agregar a la lista
     for pagina in range(0,42) :
         url:str  = f'https://autos.mercadolibre.com.ar/autos_Desde_{pagina*49}_NoIndex_True'
@@ -49,7 +56,6 @@ def obtener_ids_meli():
             id:str = str(link['href'].split("-")[1])
             ids.append(id)
         print(f"fin página {pagina+1}")
-
     # Return lista final
     return ids
 
@@ -66,15 +72,14 @@ def obtener_datos_auto(ids):
         precio:str = soup.find('span', {'class':'andes-money-amount__fraction'}).text
         moneda:str = soup.find('span', {'class':'andes-money-amount__currency-symbol'}).text
         fecha = calcular_fecha(soup.find('span', {'class':'ui-pdp-subtitle'}).text.split("·")[-1])
-        descripcion:str = intentar_descripcion(url)
         link_vendedor:str = soup.find('a', {'class': 'ui-vip-profile-info__info-link'}, href=True)['href']
         vendedor:str = soup.find('a', {'class': 'ui-vip-profile-info__info-link'}).text
         ubicacion:str = soup.find_all('p', {'class': 'ui-seller-info__status-info__subtitle'})[-1].text
         fotos = fotos_auto(soup)
-        caracteristicas = soup.find('div', {'class':'ui-pdp-collapsable__container'})
+        #descripcion, caracteristicas = obtener_descr_carac(url)
         # Print
-        print({"precio":precio,"moneda": moneda,"fecha":fecha, "descripcion":descripcion, "link_vendedor":link_vendedor,"vendedor_nombre": vendedor, "ubicacion_auto":ubicacion, "links_fotos":fotos})  
-        
+        datos = {"id":id,"precio":precio,"moneda": moneda,"fecha":fecha, "link_vendedor":link_vendedor,"vendedor_nombre": vendedor, "ubicacion_auto":ubicacion, "links_fotos":fotos} 
+        print(datos)
 
 
 # Al ejecutar...
