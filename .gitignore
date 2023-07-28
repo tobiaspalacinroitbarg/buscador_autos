@@ -1,0 +1,6 @@
+venv
+__pycache__
+scrapy/buscadordeautos/creds.py
+data.csv
+data.json
+scrapy.cfg
