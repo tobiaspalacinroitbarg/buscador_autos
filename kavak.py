@@ -2,9 +2,6 @@
 import http.client
 import requests
 import pandas as pd
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.by import By
 import time
 import pandas as pd
 import json
