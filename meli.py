@@ -1,4 +1,4 @@
-#Imports
+# Imports
 import bs4
 import requests
 from bs4 import BeautifulSoup
@@ -79,7 +79,7 @@ def obtener_ids_meli():
             ids.append(id)
         print(f"fin página {pagina+1}")
     # Return lista final
-    with open("ids_meli.txt","w") as f:
+    with open("./dataset/meli/ids_meli.txt","w") as f:
         f.write(str(ids))
     return
 
@@ -117,11 +117,11 @@ if __name__=='__main__':
     # Obtener ids
     #obtener_ids_meli()
     # Leer id's
-    with open ("./ids_meli.txt","r") as f:
+    with open("./datasets/meli/ids_meli.txt","r") as f:
         ids = eval(f.read())
     # Crear driver
     driver = webdriver.Chrome()
     # Obtener datos
     df = obtener_datos_auto(ids, driver)
     # Exportar
-    df.to_excel("meli8-8-23.xlsx")
+    df.to_excel("./dataset/meli/meli8-8-23.xlsx")
